@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.doomies.demo.model.User;
 import com.doomies.demo.repository.UserRepository;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 @Service
 public class CasinoService {
 
@@ -35,7 +36,7 @@ public class CasinoService {
         User user = userOptional.get();
 
         if (user.getSaldo() < monto) {
-            throw new IllegalArgumentException("Saldo insuficiente");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
 
         boolean gana = random.nextBoolean();
