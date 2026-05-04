@@ -2,7 +2,10 @@ package com.doomies.demo.service;
 
 import com.doomies.demo.model.User;
 import com.doomies.demo.repository.UserRepository;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ public User crearUsuario(User user) {
 
 public User obtenerUsuario(Long id) {
     return repo.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
 }
 
     public void eliminarUsuario(Long id) {
