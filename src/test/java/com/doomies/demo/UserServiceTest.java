@@ -1,17 +1,16 @@
 package com.doomies.demo;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import com.doomies.demo.model.User;
 import com.doomies.demo.repository.UserRepository;
 import com.doomies.demo.service.UserService;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-public class UserServiceTest {
+class UserServiceTest {
     
     @Test
     void testObtenerUsuarios() {
