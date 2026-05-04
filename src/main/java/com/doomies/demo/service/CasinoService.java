@@ -1,20 +1,20 @@
 package com.doomies.demo.service;
 
+import java.security.SecureRandom;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.doomies.demo.model.User;
 import com.doomies.demo.repository.UserRepository;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
-import java.util.Random;
 
 @Service
 public class CasinoService {
 
     private final UserRepository userRepository;
-    private final Random random = new Random();
+
+
+    private final SecureRandom random = new SecureRandom();
 
     public CasinoService(UserRepository userRepository) {
         this.userRepository = userRepository;
