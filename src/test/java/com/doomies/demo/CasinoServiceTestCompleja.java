@@ -7,6 +7,8 @@ import com.doomies.demo.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -38,17 +40,20 @@ public class CasinoServiceTestCompleja {
     @Test
     void testSaldoInsuficiente() {
 
-        // Arrange (Preparación)
+        // Arrange
         User user = new User("Carlos","carlos@mail.com",25);
         user.setSaldo(10);
 
         when(repo.findById(1L)).thenReturn(Optional.of(user));
 
-         // Act + Assert (Ejecución y verificación)
-        assertThrows(
-                IllegalArgumentException.class,
+        // Act + Assert
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
                 () -> service.apostar(1L, 50)
         );
+
+        assertEquals("Saldo insuficiente", exception.getReason());
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
 
     @Test
