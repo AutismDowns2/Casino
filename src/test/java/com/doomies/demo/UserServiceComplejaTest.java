@@ -6,6 +6,8 @@ import com.doomies.demo.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -64,12 +66,13 @@ class UserServiceComplejaTest {
 
         when(repo.findById(1L)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
                 () -> service.obtenerUsuario(1L)
         );
 
-        assertEquals("Usuario no encontrado", exception.getMessage());
+        assertEquals("Usuario no encontrado", exception.getReason());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
 
         verify(repo, times(1)).findById(1L);
     }
