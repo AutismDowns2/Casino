@@ -13,8 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 public class CasinoService {
 
     private final UserRepository userRepository;
-
-
     private final SecureRandom random = new SecureRandom();
 
     public CasinoService(UserRepository userRepository) {
@@ -23,23 +21,42 @@ public class CasinoService {
 
     public String apostar(Long userId, double monto) {
 
+        validarMonto(monto);
+
+        User user = obtenerUsuario(userId);
+
+        validarSaldo(user, monto);
+
+        boolean gana = random.nextBoolean();
+
+        return procesarResultado(user, monto, gana);
+    }
+
+    // 🔹 Métodos auxiliares (bajan complejidad)
+
+    private void validarMonto(double monto) {
         if (monto <= 0) {
             throw new IllegalArgumentException("El monto debe ser mayor a 0");
         }
+    }
 
+    private User obtenerUsuario(Long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado");
+            throw new UserNotFoundException("Usuario no encontrado");
         }
 
-        User user = userOptional.get();
+        return userOptional.get();
+    }
 
+    private void validarSaldo(User user, double monto) {
         if (user.getSaldo() < monto) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
         }
+    }
 
-        boolean gana = random.nextBoolean();
+    private String procesarResultado(User user, double monto, boolean gana) {
 
         if (gana) {
             double ganancia = monto * 2;
